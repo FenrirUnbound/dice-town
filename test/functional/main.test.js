@@ -1,6 +1,6 @@
 var expect = require('chai').expect;
 
-describe('Status', function describeMain() {
+describe('Main', function describeMain() {
   var server;
 
   beforeEach(function (done) {
@@ -18,15 +18,15 @@ describe('Status', function describeMain() {
   });
 
 
-  it('has a plugin status', function testStatus(done) {
+  it('has a main page', function testStatus(done) {
     server.inject({
       method: 'GET',
-      url: '/status'
+      url: '/'
     }, function (response) {
       var data;
       expect(response.statusCode).to.equal(200);
-      data = JSON.parse(response.payload);
-      expect(data).to.deep.equal({status:'OK'});
+      expect(response.headers).to.have.property('content-type')
+        .that.equal('text/html');
       done();
     });
   });
