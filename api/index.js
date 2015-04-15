@@ -1,3 +1,4 @@
+var datastore = require('./services/datastore');
 var path = require('path');
 
 exports.register = function (server, options, next) {
@@ -6,6 +7,18 @@ exports.register = function (server, options, next) {
     path: '/status',
     handler: function (request, reply) {
       return reply({status: 'OK'});
+    }
+  });
+
+  server.route({
+    method: 'POST',
+    path: '/games',
+    handler: function (request, reply) {
+      datastore.createGame()
+      .then(function (gameData) {
+        return reply(gameData).code(201);
+      })
+      .done();
     }
   });
 
