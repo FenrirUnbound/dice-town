@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "boom": "^2.7.0",
-    "browserify": "^9.0.8"
+    "browserify": "^9.0.8",
+    "react": "^0.13.1"
   }
 }
