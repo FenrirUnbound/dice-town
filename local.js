@@ -1,5 +1,11 @@
+var env = require('node-env-file');
 var hapi = require('hapi');
-var server = new hapi.Server();
+var path = require('path');
+var server;
+
+env(path.resolve(__dirname, './.env'), {raise: true});
+
+server = new hapi.Server();
 server.connection();
 
 server.register([
