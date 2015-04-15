@@ -1,21 +1,28 @@
+var boom = require('boom');
 var browserify = require('browserify');
 var mainScript;
 var path = require('path');
+var SCRIPTS_CACHE = {};
 
 exports.register = function (server, options, next) {
   server.route({
     method: 'GET',
-    path: '/scripts/main.js',
+    path: '/scripts/{scriptName}.js',
     handler: function (request, reply) {
-      if (!!mainScript) {
-        reply(mainScript).type('text/javascript');
-      } else {
-        var filepath = path.resolve(__dirname, '../lib/main');
-        browserify(filepath).bundle(function (error, buffer) {
-          mainScript = buffer.toString();
-          return reply(mainScript).type('text/javascript');
-        });
+      var scriptName = request.params.scriptName;
+      if (SCRIPTS_CACHE.hasOwnProperty(scriptName)) {
+        return reply(SCRIPTS_CACHE[scriptName]).type('text/javascript');
       }
+
+      var filepath = path.resolve(__dirname, '../lib/' + scriptName);
+      browserify(filepath).bundle(function (error, buffer) {
+        if (error) {
+          return reply(boom.notFound());
+        }
+
+        SCRIPTS_CACHE[scriptName] = buffer.toString();
+        return reply(SCRIPTS_CACHE[scriptName]).type('text/javascript');
+      });
     }
   });
 
