@@ -5,6 +5,14 @@ var path = require('path');
 var SCRIPTS_CACHE = {};
 
 exports.register = function (server, options, next) {
+    server.views({
+      engines: {
+        html: require("handlebars")
+      },
+      relativeTo: __dirname,
+      path: "../views/templates"
+    });
+
   server.route({
     method: 'GET',
     path: '/scripts/{scriptName}.js',
@@ -23,6 +31,15 @@ exports.register = function (server, options, next) {
         SCRIPTS_CACHE[scriptName] = buffer.toString();
         return reply(SCRIPTS_CACHE[scriptName]).type('text/javascript');
       });
+    }
+  });
+
+  server.route({
+    method: 'GET',
+    path: '/games/{gameId}',
+    handler: function (request, reply) {
+      var gameId = request.params.gameId;
+      reply.view('game.html', {gameId: gameId});
     }
   });
 
