@@ -26,7 +26,7 @@ describe('Main', function describeMain() {
       var data;
       expect(response.statusCode).to.equal(200);
       expect(response.headers).to.have.property('content-type')
-        .that.equal('text/html');
+        .that.equal('text/html; charset=utf-8');
       done();
     });
   });
