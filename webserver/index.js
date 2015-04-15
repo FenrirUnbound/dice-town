@@ -21,6 +21,15 @@ exports.register = function (server, options, next) {
 
   server.route({
     method: 'GET',
+    path: '/admin.html',
+    handler: function (request, reply) {
+      var filepath = path.resolve(__dirname, '../views/admin.html');
+      return reply.file(filepath);
+    }
+  });
+
+  server.route({
+    method: 'GET',
     path: '/',
     handler: function (request, reply) {
       // TODO: move views local to webserver plugin
