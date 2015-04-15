@@ -21,7 +21,7 @@ describe('Status', function describeMain() {
   it('has a plugin status', function testStatus(done) {
     server.inject({
       method: 'GET',
-      url: '/status'
+      url: '/api/status'
     }, function (response) {
       var data;
       expect(response.statusCode).to.equal(200);

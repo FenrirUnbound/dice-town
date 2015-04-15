@@ -1,24 +1,27 @@
-var browserify = require('browserify');
-var mainScript;
-var path = require('path');
+var q = require('q');
 
 exports.register = function (server, options, next) {
-  server.register([
-    {
-      register: require('./api'),
-      options: {
-        select: 'api'
-      }
-    },
-    {
+  var register = q.nbind(server.register, server);
+
+  register({
+    register: require('./api'),
+    options: {
+      select: 'api'
+    }
+  }, {
+    routes: {
+      prefix: '/api'
+    }
+  })
+  .then(function () {
+    return register({
       register: require('./webserver'),
       options: {
         select: 'web'
       }
-    }
-  ], function (error) {
-    next();
-  });
+    });
+  })
+  .nodeify(next);
 };
 
 exports.register.attributes = {
