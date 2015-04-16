@@ -9,7 +9,7 @@ describe('API', function describeMain() {
     var hapi = require('hapi');
     var plugin = require('../..');
 
-    env(path.resolve(__dirname, '../../.env'), {raise: true});
+    env(path.resolve(__dirname, '../../.env'), {raise: false});
     server = new hapi.Server();
     server.connection();
     server.register({
