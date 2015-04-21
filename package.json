@@ -22,6 +22,7 @@
     "handlebars": "^3.0.1",
     "q": "^1.2.0",
     "react": "^0.13.1",
+    "react-bootstrap": "^0.20.3",
     "wreck": "^5.4.0",
     "zepto-browserify": "^1.1.6-1"
   }
