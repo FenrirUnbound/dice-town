@@ -16,9 +16,9 @@ exports.register = function (server, options, next) {
     path: '/games',
     handler: function (request, reply) {
       datastore.createGame()
-      .then(function createGame(gameData) {
+      .then(function createGame(gameId) {
         return game.createGame({
-          gameId: gameData.gameId,
+          gameId: gameId,
           // TODO: get the game creator's id
           playerId: 1
         });
