@@ -48,22 +48,33 @@ describe('API', function describeMain() {
   });
 
   it('saves a game', function testGameSave(done) {
+    var updatedTurnCount = 20150430;
+
     testRequest({
       method: 'POST',
       url: '/api/games'
     }, server)
-    .then(function createdGame(response) {
+    .then(function modifyGame(response) {
       var data = JSON.parse(response.payload);
-      return data.gameId;
+      data.turns = {
+        count: updatedTurnCount
+      };
+      return data;
     })
-    .then(function updateGame(gameId) {
+    .then(function updateGame(gameData) {
+      var gameId = gameData.gameId;
       return testRequest({
         method: 'PUT',
+        payload: JSON.stringify(gameData),
         url: '/api/games/' + gameId
       }, server);
     })
     .then(function verify(response) {
+      var data;
       expect(response.statusCode).to.equal(200);
+      data = JSON.parse(response.payload);
+      expect(data).to.have.property('turns')
+        .that.has.property('count').that.is.to.equal(updatedTurnCount);
     })
     .done(done);
   });

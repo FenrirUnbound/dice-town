@@ -30,8 +30,9 @@ function save(gameId, gameData) {
     pathname: '/api/games/dice_town/' + gameId,
     protocol: 'http'
   });
+  var payload = JSON.stringify(gameData);
 
-  return q.ninvoke(wreck, 'put', targetUrl, {json: true})
+  return q.ninvoke(wreck, 'put', targetUrl, {json: true, payload: payload})
   .spread(function (response, payload) {
     return gameData;
   });
