@@ -1,8 +1,18 @@
 var expect = require('chai').expect;
 var path = require('path');
+var q = require('q');
 
 describe('API', function describeMain() {
   var server;
+  var testRequest = function (options, server) {
+    var promise = q.defer();
+
+    server.inject(options, function (response) {
+      return promise.resolve(response);
+    });
+
+    return promise.promise;
+  };
 
   beforeEach(function (done) {
     var env = require('node-env-file');
@@ -23,16 +33,49 @@ describe('API', function describeMain() {
 
 
   it('creates a game', function testGameCreate(done) {
-    server.inject({
+    testRequest({
       method: 'POST',
       url: '/api/games'
-    }, function (response) {
+    }, server)
+    .then(function(response) {
       var data;
       expect(response.statusCode).to.equal(201);
       data = JSON.parse(response.payload);
       expect(data).to.be.an('object')
         .to.have.property('gameId').that.is.greaterThan(0);
-      done();
-    });
+    })
+    .done(done);
+  });
+
+  it('saves a game', function testGameSave(done) {
+    var updatedTurnCount = 20150430;
+
+    testRequest({
+      method: 'POST',
+      url: '/api/games'
+    }, server)
+    .then(function modifyGame(response) {
+      var data = JSON.parse(response.payload);
+      data.turns = {
+        count: updatedTurnCount
+      };
+      return data;
+    })
+    .then(function updateGame(gameData) {
+      var gameId = gameData.gameId;
+      return testRequest({
+        method: 'PUT',
+        payload: JSON.stringify(gameData),
+        url: '/api/games/' + gameId
+      }, server);
+    })
+    .then(function verify(response) {
+      var data;
+      expect(response.statusCode).to.equal(200);
+      data = JSON.parse(response.payload);
+      expect(data).to.have.property('turns')
+        .that.has.property('count').that.is.to.equal(updatedTurnCount);
+    })
+    .done(done);
   });
 });

@@ -24,6 +24,22 @@ function registerGame() {
   });
 }
 
+function save(gameId, gameData) {
+  var targetUrl = url.format({
+    host: process.env.GAME_HOST,
+    pathname: '/api/games/dice_town/' + gameId,
+    protocol: 'http'
+  });
+  var payload = JSON.stringify(gameData);
+
+  return q.ninvoke(wreck, 'put', targetUrl, {json: true, payload: payload})
+  .spread(function (response, payload) {
+    return gameData;
+  });
+
+}
+
 module.exports = {
-  createGame: create
+  createGame: create,
+  saveGame: save
 };

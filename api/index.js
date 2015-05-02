@@ -22,6 +22,21 @@ exports.register = function (server, options, next) {
     }
   });
 
+  server.route({
+    method: 'PUT',
+    path: '/games/{gameId}',
+    handler: function (request, reply) {
+      var gameId = request.params.gameId;
+      var payload = request.payload;
+
+      datastore.saveGame(gameId, payload)
+      .then(function (gameData) {
+        return reply(gameData).code(200);
+      })
+      .done();
+    }
+  });
+
   next();
 };
 
