@@ -1,4 +1,5 @@
 var datastore = require('./services/datastore');
+var game = require('fenrirunbound-skuld');
 var path = require('path');
 
 exports.register = function (server, options, next) {
@@ -15,6 +16,16 @@ exports.register = function (server, options, next) {
     path: '/games',
     handler: function (request, reply) {
       datastore.createGame()
+      .then(function createGame(gameId) {
+        return game.createGame({
+          gameId: gameId,
+          // TODO: get the game creator's id
+          playerId: 1
+        });
+      })
+      .then(function saveGameCreation(gameData) {
+        return datastore.saveGame(gameData.gameId, gameData);
+      })
       .then(function (gameData) {
         return reply(gameData).code(201);
       })

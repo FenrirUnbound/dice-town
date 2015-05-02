@@ -5,9 +5,7 @@ var wreck = require('wreck');
 function create() {
   return registerGame()
   .then(function (gameData) {
-    return {
-      gameId: gameData.gameId
-    }
+    return gameData.gameId;
   });
 }
 

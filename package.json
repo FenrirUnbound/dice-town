@@ -19,6 +19,7 @@
   "dependencies": {
     "boom": "^2.7.0",
     "browserify": "^9.0.8",
+    "fenrirunbound-skuld": "git://github.com/fenrirunbound/skuld",
     "handlebars": "^3.0.1",
     "q": "^1.2.0",
     "react": "^0.13.1",
