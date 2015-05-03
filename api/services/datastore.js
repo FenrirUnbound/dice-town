@@ -9,6 +9,19 @@ function create() {
   });
 }
 
+function get(gameId) {
+  var targetUrl = url.format({
+    host: process.env.GAME_HOST,
+    pathname: '/api/games/dice_town/' + gameId,
+    protocol: 'http'
+  });
+
+  return q.ninvoke(wreck, 'get', targetUrl, {json: true})
+  .spread(function completeDatastoreRequest(response, payload) {
+    return payload;
+  });
+}
+
 function registerGame() {
   var targetUrl = url.format({
     host: process.env.GAME_HOST,
@@ -39,5 +52,6 @@ function save(gameId, gameData) {
 
 module.exports = {
   createGame: create,
+  fetchGame: get,
   saveGame: save
 };

@@ -48,6 +48,20 @@ exports.register = function (server, options, next) {
     }
   });
 
+  server.route({
+    method: 'GET',
+    path: '/games/{gameId}',
+    handler: function (request, reply) {
+      var gameId = request.params.gameId;
+
+      datastore.fetchGame(gameId)
+      .then(function respond(gameData) {
+        return reply(gameData).code(200);
+      })
+      .done();
+    }
+  });
+
   next();
 };
 
