@@ -78,4 +78,50 @@ describe('API', function describeMain() {
     })
     .done(done);
   });
+
+  it('fetches a game', function testGameFetch(done) {
+    var updatedTurnCount = 321;
+
+    testRequest({
+      method: 'POST',
+      url: '/api/games'
+    }, server)
+    .then(function modifyGame(response) {
+      var data = JSON.parse(response.payload);
+      data.turns = {
+        count: updatedTurnCount
+      };
+      return data;
+    })
+    .then(function updateGame(gameData) {
+      var gameId = gameData.gameId;
+      return testRequest({
+        method: 'PUT',
+        payload: JSON.stringify(gameData),
+        url: '/api/games/' + gameId
+      }, server)
+      .then(function parsePayload(response) {
+        return JSON.parse(response.payload);
+      });
+    })
+    .then(function fetchGame(gameData) {
+      return testRequest({
+        method: 'GET',
+        url: '/api/games/' + gameData.gameId
+      }, server)
+      .then(function parsePayload(response) {
+        var data;
+        expect(response.statusCode).to.equal(200);
+        data = JSON.parse(response.payload);
+        return {
+          fetchedData: data,
+          updatedData: gameData
+        };
+      });
+    })
+    .then(function verify(data) {
+      expect(data.fetchedData).to.deep.equal(data.updatedData);
+    })
+    .done(done);
+  });
 });
