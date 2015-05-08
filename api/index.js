@@ -18,9 +18,7 @@ exports.register = function (server, options, next) {
       datastore.createGame()
       .then(function createGame(gameId) {
         return game.createGame({
-          gameId: gameId,
-          // TODO: get the game creator's id
-          playerId: 1
+          gameId: gameId
         });
       })
       .then(function saveGameCreation(gameData) {
