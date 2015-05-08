@@ -5,6 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Game {{gameId}}</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <style>
+    .player-panel-row {
+      padding: 0px 15px;
+    }
+    .player-panel-row > div {
+      padding: 0px;
+      padding-left: 15px;
+    }
+    .player-panel-row > :first-child {
+      padding-left: 0px;
+    }
+  </style>
   <input id="gameId" value="{{gameId}}" hidden></input>
 </head>
 <body>
